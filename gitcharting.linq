@@ -58,9 +58,11 @@ void Main()
 				where i.CommitDate >= DateTime.Today.AddDays(-60)
 				group i by i.CommitDate.Date into g
 				select new{CommitDate = g.Key, 
+							Commits = g.Count (),
 							Insertions = g.Sum (x => x.Insertions),
 						    Deletions = g.Sum (x => x.Deletions),
-							FilesChanged = g.Sum (x => x.FilesChanged)};
+							FilesChanged = g.Sum (x => x.FilesChanged),
+							DelPct = Utilities.DeletionPercentage(g.Sum (x => x.Insertions),g.Sum (x => x.Deletions))};
 	
 	stats.Dump();
 	//var chartList = foo.Where (f => f.CommitDate >= DateTime.Today.AddDays(-10));
@@ -120,6 +122,7 @@ public class Commit
 	
 	public DateTime CommitDate {get;set;}
 	public string Message {get;set;}
+	
 	public void AddChangeString(string value) {
 			_changeString = value;
 			var elements = value.Split(' ');
@@ -146,4 +149,13 @@ public class Commit
 	public string AuthorName {get{return _authorName;}}
 	public string AuthorEmail {get{return _authorEmail;}}
 	
+}
+
+public static class Utilities
+{
+	public static decimal DeletionPercentage(int insertions, int deletions)
+	{
+		//Math.Round(Convert.ToDecimal(g.Sum (x => x.Deletions)) / Convert.ToDecimal((g.Sum (x => x.Deletions) + g.Sum (x => x.Insertions)))*100,0)
+		return Math.Round(Convert.ToDecimal(deletions) / Convert.ToDecimal((deletions + insertions))*100,0);
+	}
 }
