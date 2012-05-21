@@ -62,7 +62,7 @@ void Main()
 							Insertions = g.Sum (x => x.Insertions),
 						    Deletions = g.Sum (x => x.Deletions),
 							FilesChanged = g.Sum (x => x.FilesChanged),
-							DelPct = Utilities.DeletionPercentage(g.Sum (x => x.Insertions),g.Sum (x => x.Deletions))};
+							DelPct = Utilities.Percentage(g.Sum (x => x.Insertions),g.Sum (x => x.Deletions))};
 	
 	stats.Dump();
 	//var chartList = foo.Where (f => f.CommitDate >= DateTime.Today.AddDays(-10));
@@ -153,9 +153,9 @@ public class Commit
 
 public static class Utilities
 {
-	public static decimal DeletionPercentage(int insertions, int deletions)
+	public static decimal Percentage(int one, int two)
 	{
 		//Math.Round(Convert.ToDecimal(g.Sum (x => x.Deletions)) / Convert.ToDecimal((g.Sum (x => x.Deletions) + g.Sum (x => x.Insertions)))*100,0)
-		return Math.Round(Convert.ToDecimal(deletions) / Convert.ToDecimal((deletions + insertions))*100,0);
+		return Math.Round(Convert.ToDecimal(two) / Convert.ToDecimal((two + one))*100,0);
 	}
 }
