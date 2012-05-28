@@ -52,8 +52,19 @@ void Main()
 			foo.Add(thisCommit);
 		}
 	}
+
+		var authorStats = from i in foo
+				where i.CommitHash != "e73ce077652ce77b7f79eb3de4f8b65e246cbca5" && i.CommitHash != "b510dd93ee1591efe100351c64e9fa1726f8f1ad"
+				group i by i.AuthorName into g
+				select new{Author = g.Key, 
+							Commits = g.Count (),
+							Insertions = g.Sum (x => x.Insertions),
+						    Deletions = g.Sum (x => x.Deletions),
+							FilesChanged = g.Sum (x => x.FilesChanged),
+							DelPct = Utilities.Percentage(g.Sum (x => x.Insertions),g.Sum (x => x.Deletions))};
 	
-	//foo.Dump();
+	authorStats.Dump();
+	
 	var stats = from i in foo
 				where i.CommitDate >= DateTime.Today.AddDays(-60)
 				group i by i.CommitDate.Date into g
@@ -155,7 +166,6 @@ public static class Utilities
 {
 	public static decimal Percentage(int one, int two)
 	{
-		//Math.Round(Convert.ToDecimal(g.Sum (x => x.Deletions)) / Convert.ToDecimal((g.Sum (x => x.Deletions) + g.Sum (x => x.Insertions)))*100,0)
-		return Math.Round(Convert.ToDecimal(two) / Convert.ToDecimal((two + one))*100,0);
+		return Math.Round(Convert.ToDecimal(two) / Convert.ToDecimal(one)*100,0);
 	}
 }
