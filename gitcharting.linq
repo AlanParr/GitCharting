@@ -53,8 +53,10 @@ void Main()
 		}
 	}
 
+		var blackList = new List<String>(){"e73ce077652ce77b7f79eb3de4f8b65e246cbca5","b510dd93ee1591efe100351c64e9fa1726f8f1ad"};
+
 		var authorStats = from i in foo
-				where i.CommitHash != "e73ce077652ce77b7f79eb3de4f8b65e246cbca5" && i.CommitHash != "b510dd93ee1591efe100351c64e9fa1726f8f1ad"
+				where !blackList.Contains(i.CommitHash)
 				group i by i.AuthorName into g
 				select new{Author = g.Key, 
 							Commits = g.Count (),
