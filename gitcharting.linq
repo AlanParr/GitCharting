@@ -92,10 +92,11 @@ void Main()
 	yLabelStyle.Font = new Font("Arial",8);
 	yLabelStyle.IsStaggered=false;
 
-	var range = 4000;
+	var range = 20000;
 	
 	var series1 = new Series();
 	var series2 = new Series();
+	series1.ChartType = SeriesChartType.StackedColumn;
 	
 	var xs = chartList.Select (f => f.CommitDate.Date);
 	var ys = chartList.Select (f => f.Insertions);
